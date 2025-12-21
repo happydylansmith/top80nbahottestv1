@@ -20,8 +20,12 @@
     }
     h3 {
       font-size: 14px;
-      margin: 2px 0;
+      margin: 10px 0;
       font-style: italic;
+    }
+    h3 a {
+      text-decoration: none;
+      color: black;
     }
     button {
       margin: 5px 5px 15px 0;
@@ -46,10 +50,13 @@
       border: 1px solid #000;
       cursor: grab;
       background: #fff;
-      max-width: 320px; /* <-- Updated horizontal max width */
+      max-width: 320px; /* MAX WIDTH SET */
+      transition: transform 0.2s ease;
+      position: relative;
     }
     .rank-item.dragging {
-      opacity: 0.5;
+      opacity: 0.8;
+      cursor: grabbing;
     }
     .rank-number {
       width: 40px;
@@ -91,6 +98,10 @@
       vertical-align: middle;
       min-width: 80px;
     }
+    #comparisonView th:nth-child(2),
+    #comparisonView th:nth-child(4) {
+      width: 150px; /* Fixed width for second & fourth columns */
+    }
     .legend {
       margin: 10px 0;
       font-size: 14px;
@@ -107,7 +118,7 @@
 <body>
   <h1>NBA Top 80 Players</h1>
   <h2>beauty is subjective. democracy is hot.</h2>
-  <h3>@nbaresdev</h3>
+  <h3><a href="https://www.instagram.com/nbaresdev/" target="_blank">@nbaresdev</a></h3>
 
   <div>
     <button id="clearBtn">Clear All</button>
@@ -131,9 +142,9 @@
       <thead>
         <tr>
           <th>#</th>
-          <th style="width:150px;">Your List</th>
+          <th>Your List</th>
           <th></th>
-          <th style="width:150px;">Our List</th>
+          <th>Our List</th>
           <th></th>
         </tr>
       </thead>
@@ -264,7 +275,7 @@
       userRankings.forEach((name, idx)=>{
         const row = document.createElement('tr');
         const fixedName = fixedList[idx] || "";
-        const yourColor = !name ? "" : !fixedList.includes(name) ? "#ff6b6b" : fixedList.indexOf(name) < idx ? "#a0c4ff" : fixedList.indexOf(name) > idx ? "#ffe066" : "#8ae29c";
+        const yourColor = !name ? "" : !fixedList.includes(name) ? "#ff6b6b" : fixedList.indexOf(name) < idx ? "#ffe066" : fixedList.indexOf(name) > idx ? "#a0c4ff" : "#8ae29c";
         const [firstName, ...rest] = name.split(' ');
         const lastName = rest.join('');
         const yourID = (lastName.slice(0,5)+firstName.slice(0,2)+'01').toLowerCase();
