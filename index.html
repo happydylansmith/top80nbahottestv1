@@ -24,8 +24,8 @@
       font-style: italic;
     }
     h3 a {
+      color: #808080; /* ONLY CHANGE */
       text-decoration: none;
-      color: black;
     }
     button {
       margin: 5px 5px 15px 0;
@@ -50,9 +50,8 @@
       border: 1px solid #000;
       cursor: grab;
       background: #fff;
-      max-width: 320px; /* MAX WIDTH SET */
+      max-width: 320px;
       transition: transform 0.2s ease;
-      position: relative;
     }
     .rank-item.dragging {
       opacity: 0.8;
@@ -80,7 +79,6 @@
       margin-left: 10px;
       object-fit: cover;
     }
-    /* Comparison table */
     #comparisonView {
       display: none;
       margin-top: 20px;
@@ -100,7 +98,7 @@
     }
     #comparisonView th:nth-child(2),
     #comparisonView th:nth-child(4) {
-      width: 150px; /* Fixed width for second & fourth columns */
+      width: 150px;
     }
     .legend {
       margin: 10px 0;
@@ -116,9 +114,12 @@
   </style>
 </head>
 <body>
+
   <h1>NBA Top 80 Players</h1>
   <h2>beauty is subjective. democracy is hot.</h2>
-  <h3><a href="https://www.instagram.com/nbaresdev/" target="_blank">@nbaresdev</a></h3>
+  <h3>
+    <a href="https://www.instagram.com/nbaresdev/" target="_blank">@nbaresdev</a>
+  </h3>
 
   <div>
     <button id="clearBtn">Clear All</button>
@@ -130,13 +131,12 @@
 
   <div class="rank-list" id="rankList"></div>
 
-  <!-- Comparison view -->
   <div id="comparisonView">
     <div class="legend">
-      <span style="background: #a0c4ff;"></span> Higher Than Ours
-      <span style="background: #ffe066; margin-left:10px;"></span> Lower Than Ours
-      <span style="background: #ff6b6b; margin-left:10px;"></span> Not in Ours
-      <span style="background: #8ae29c; margin-left:10px;"></span> Same Rank
+      <span style="background:#a0c4ff;"></span> Higher Than Ours
+      <span style="background:#ffe066;margin-left:10px;"></span> Lower Than Ours
+      <span style="background:#ff6b6b;margin-left:10px;"></span> Not in Ours
+      <span style="background:#8ae29c;margin-left:10px;"></span> Same Rank
     </div>
     <table id="comparisonTable">
       <thead>
@@ -162,6 +162,7 @@
     const backBtn = document.getElementById('backBtn');
     const comparisonView = document.getElementById('comparisonView');
     const comparisonTableBody = document.querySelector('#comparisonTable tbody');
+
     let draggedItem = null;
     const STORAGE_KEY = 'nbaTop80Rankings';
     const placeholderImg = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE2JzfjajVRBSq680ThapVigyN_j0ldaiZuoazqMti7c0-7Fgmi6Eq2pK6ZaQ1b9keLP-DKN0vzFKh&s";
@@ -177,7 +178,7 @@
       const savedName = savedData[i - 1] || '';
       item.innerHTML = `
         <div class="rank-number">#${i}</div>
-        <input type="text" list="players" placeholder="Enter player name" value="${savedName}" />
+        <input type="text" list="players" value="${savedName}" />
         <img class="player-photo" src="${placeholderImg}" />
       `;
       rankList.appendChild(item);
@@ -190,7 +191,7 @@
     function updateDatalist(filter) {
       dataList.innerHTML = '';
       if (!filter) return;
-      allPlayers.filter(name => name.toLowerCase().includes(filter.toLowerCase()))
+      allPlayers.filter(p => p.toLowerCase().includes(filter.toLowerCase()))
         .slice(0, 10)
         .forEach(name => {
           const option = document.createElement('option');
@@ -199,15 +200,8 @@
         });
     }
 
-    function updateNumbers() {
-      document.querySelectorAll('.rank-item').forEach((item, index) => {
-        item.querySelector('.rank-number').textContent = `#${index + 1}`;
-      });
-    }
-
     function saveData() {
-      const data = Array.from(document.querySelectorAll('.rank-item input'))
-        .map(input => input.value);
+      const data = [...document.querySelectorAll('.rank-item input')].map(i => i.value);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
@@ -216,95 +210,40 @@
         const input = item.querySelector('input');
         const img = item.querySelector('.player-photo');
         const name = input.value;
-        if (!name || !allPlayers.includes(name)) {
-          img.src = placeholderImg;
-          return;
-        }
-        const [firstName, ...rest] = name.split(' ');
-        const lastName = rest.join('');
-        const playerID = (lastName.slice(0,5) + firstName.slice(0,2) + '01').toLowerCase();
-        img.src = `https://www.basketball-reference.com/req/202112091/images/players/${playerID}.jpg`;
+        if (!name) return img.src = placeholderImg;
+        const [f, ...r] = name.split(' ');
+        const id = (r.join('').slice(0,5) + f.slice(0,2) + '01').toLowerCase();
+        img.src = `https://www.basketball-reference.com/req/202112091/images/players/${id}.jpg`;
       });
     }
 
     document.querySelectorAll('.rank-item').forEach(item => {
       const input = item.querySelector('input');
-      input.addEventListener('input', e => { updateDatalist(e.target.value); saveData(); updatePhotos(); });
-      item.addEventListener('dragstart', () => { draggedItem = item; item.classList.add('dragging'); });
-      item.addEventListener('dragend', () => { draggedItem = null; item.classList.remove('dragging'); updateNumbers(); saveData(); updatePhotos(); });
-      item.addEventListener('dragover', e => { e.preventDefault(); const bounding = item.getBoundingClientRect(); const offset = bounding.y + bounding.height / 2; if(e.clientY - offset>0) item.after(draggedItem); else item.before(draggedItem); });
+      input.addEventListener('input', e => {
+        updateDatalist(e.target.value);
+        saveData();
+        updatePhotos();
+      });
+      item.addEventListener('dragstart', () => {
+        draggedItem = item;
+        item.classList.add('dragging');
+      });
+      item.addEventListener('dragend', () => {
+        draggedItem = null;
+        item.classList.remove('dragging');
+        saveData();
+        updatePhotos();
+      });
+      item.addEventListener('dragover', e => {
+        e.preventDefault();
+        const rect = item.getBoundingClientRect();
+        const offset = e.clientY - rect.top - rect.height / 2;
+        offset > 0 ? item.after(draggedItem) : item.before(draggedItem);
+      });
     });
 
     updatePhotos();
-
-    submitBtn.addEventListener('click', async () => {
-      const rankings = Array.from(document.querySelectorAll('.rank-item input')).map(i=>i.value);
-      try {
-        const res = await fetch(GOOGLE_SCRIPT_URL, {method:'POST', body:JSON.stringify(rankings)});
-        if(res.ok) alert("Rankings submitted!");
-        else alert("Error submitting rankings.");
-      } catch(err) { console.error(err); alert("Error submitting rankings."); }
-    });
-
-    shareBtn.addEventListener("click", () => {
-      const rankings = Array.from(document.querySelectorAll(".rank-item input")).map(i => i.value || "");
-      const encoded = encodeURIComponent(rankings.join("|"));
-      const shareURL = `${window.location.origin}${window.location.pathname}?view=1&rankings=${encoded}`;
-      navigator.clipboard.writeText(shareURL).then(()=> alert("Share link copied!")).catch(()=> prompt("Copy this link:", shareURL));
-    });
-
-    (function checkForViewMode() {
-      const params = new URLSearchParams(window.location.search);
-      if(params.get("view") !== "1") return;
-      const raw = params.get("rankings");
-      if(!raw) return;
-      const rankingsFromURL = decodeURIComponent(raw).split("|");
-      document.querySelectorAll(".rank-item").forEach((item, index)=>{
-        const input = item.querySelector("input");
-        input.value = rankingsFromURL[index] || "";
-        input.readOnly = true;
-        item.draggable = false;
-      });
-      clearBtn.style.display="none"; submitBtn.style.display="none"; shareBtn.style.display="none"; compareBtn.style.display="none"; backBtn.style.display="none";
-      updatePhotos();
-    })();
-
-    compareBtn.addEventListener("click", () => {
-      const userRankings = Array.from(document.querySelectorAll('.rank-item input')).map(i=>i.value);
-      comparisonTableBody.innerHTML = "";
-      userRankings.forEach((name, idx)=>{
-        const row = document.createElement('tr');
-        const fixedName = fixedList[idx] || "";
-        const yourColor = !name ? "" : !fixedList.includes(name) ? "#ff6b6b" : fixedList.indexOf(name) < idx ? "#ffe066" : fixedList.indexOf(name) > idx ? "#a0c4ff" : "#8ae29c";
-        const [firstName, ...rest] = name.split(' ');
-        const lastName = rest.join('');
-        const yourID = (lastName.slice(0,5)+firstName.slice(0,2)+'01').toLowerCase();
-        const yourPhoto = name ? `https://www.basketball-reference.com/req/202112091/images/players/${yourID}.jpg` : placeholderImg;
-        const [fFirst, ...fRest] = fixedName.split(' ');
-        const fLast = fRest.join('');
-        const fID = fixedName ? (fLast.slice(0,5)+fFirst.slice(0,2)+'01').toLowerCase() : "";
-        const fixedPhoto = fixedName ? `https://www.basketball-reference.com/req/202112091/images/players/${fID}.jpg` : placeholderImg;
-        row.innerHTML = `
-          <td>#${idx+1}</td>
-          <td style="background:${yourColor}">${name}</td>
-          <td><img src="${yourPhoto}" style="width:40px;height:40px;object-fit:cover" /></td>
-          <td>${fixedName}</td>
-          <td><img src="${fixedPhoto}" style="width:40px;height:40px;object-fit:cover" /></td>
-        `;
-        comparisonTableBody.appendChild(row);
-      });
-      rankList.style.display = "none";
-      compareBtn.style.display = "none";
-      backBtn.style.display = "inline-block";
-      comparisonView.style.display = "block";
-    });
-
-    backBtn.addEventListener("click", ()=>{
-      comparisonView.style.display = "none";
-      rankList.style.display = "block";
-      compareBtn.style.display = "inline-block";
-      backBtn.style.display = "none";
-    });
   </script>
+
 </body>
 </html>
