@@ -80,7 +80,6 @@
       object-fit: cover;
     }
 
-    /* ===== MOBILE FRIENDLY AUTOCOMPLETE (ONLY CHANGE) ===== */
     @media (max-width: 768px) {
       input {
         font-size: 18px;
@@ -174,7 +173,10 @@
 
     let draggedItem = null;
     const STORAGE_KEY = 'nbaTop80Rankings';
-    const placeholderImg = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE2JzfjajVRBSq680ThapVigyN_j0ldaiZuoazqMti7c0-7Fgmi6Eq2pK6ZaQ1b9keLP-DKN0vzFKh&s";
+
+    /* === NEW GREY SILHOUETTE PLACEHOLDER === */
+    const placeholderImg =
+      "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png";
 
     const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     const fixedList = ["Dwyane Wade", "Nic Claxton", "Ochai Agbaju", "Tristan Thompson", "Rick Fox", "Kevin Love", "Anthony Edwards", "LeBron James", "Jared McCain", "Giannis Antetokounmpo", "Wally Szcerbiak", "Shai Gilgeous Alexander", "Dejounte Murray", "Allen Iverson", "Cam Johnson", "Raja Bell", "Kyle Korver", "Deuce McBride", "Serge Ibaka", "Devin Booker", "Jaylen Brown", "Quentin Grimes", "Kenny Smith", "Kyle Kuzma", "Carmelo Anthony", "Grant Hill", "Derrick Rose", "Jalen Green", "Tyrese Haliburton", "Jimmy Butler", "Michael Jordan", "Victor Wembanyama", "Blake Griffin", "Donavan Mitchell", "Kyrie Irving", "Kelly Oubre", "Paul George", "Donte Divincenzo", "Alan Houston", "Tony Parker", "Jayson Tatum", "Walt Frazier", "Karl Anthony Towns", "Rui Hachimura", "Jamal Murray", "tre Mann", "Andre Drummond", "Wilt Chamberlain", "Jordan Poole", "Kawhi Leonard", "Ja Morant", "John Starks", "Tim Hardaway Jr", "Josh Hart", "Jaden Ivey", "Jalen Brunson", "Irving Johnson", "Nigel Hayes", "Chandler Parsons", "Austin Reaves", "Steph Curry", "Steven Adams", "Damian Lillard", "D'Angelo Russel", "RJ Barrett", "Mike Conley", "Shaquille O'Neal", "OG Anunoby", "Julius Irving", "Domantis Sabonis", "Rudy Gobert", "Zach Lavine", "JJ Reddick", "Ben Simmons", "Jordan Clarkson", "PJ Washington", "Vince Carter", "Luka Doncic", "Joakim Noah", "Reggie Miller"];
@@ -200,7 +202,8 @@
     function updateDatalist(filter) {
       dataList.innerHTML = '';
       if (!filter) return;
-      allPlayers.filter(p => p.toLowerCase().includes(filter.toLowerCase()))
+      allPlayers
+        .filter(p => p.toLowerCase().includes(filter.toLowerCase()))
         .slice(0, 10)
         .forEach(name => {
           const option = document.createElement('option');
@@ -219,7 +222,10 @@
         const input = item.querySelector('input');
         const img = item.querySelector('.player-photo');
         const name = input.value;
-        if (!name) return img.src = placeholderImg;
+        if (!name) {
+          img.src = placeholderImg;
+          return;
+        }
         const [f, ...r] = name.split(' ');
         const id = (r.join('').slice(0,5) + f.slice(0,2) + '01').toLowerCase();
         img.src = `https://www.basketball-reference.com/req/202112091/images/players/${id}.jpg`;
