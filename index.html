@@ -160,7 +160,7 @@ const comparisonTableBody = document.querySelector('#comparisonTable tbody');
 let draggedItem = null;
 const STORAGE_KEY = 'nbaTop80Rankings';
 
-/* ✅ BULLETPROOF GREY SILHOUETTE (INLINE SVG) */
+/* Grey silhouette placeholder */
 const placeholderImg =
   'data:image/svg+xml;utf8,' +
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">' +
@@ -202,6 +202,17 @@ function updatePhotos() {
     img.src = `https://www.basketball-reference.com/req/202112091/images/players/${id}.jpg`;
   });
 }
+
+/* ✅ ONLY NEW LOGIC: CLEAR ALL BUTTON */
+clearBtn.addEventListener('click', () => {
+  document.querySelectorAll('.rank-item input').forEach(input => {
+    input.value = '';
+  });
+  document.querySelectorAll('.player-photo').forEach(img => {
+    img.src = placeholderImg;
+  });
+  localStorage.removeItem(STORAGE_KEY);
+});
 
 updatePhotos();
 </script>
