@@ -25,7 +25,7 @@
     }
     h3 a {
       text-decoration: none;
-      color: black;
+      color: #808080; /* CHANGED TO GRAY */
     }
     button {
       margin: 5px 5px 15px 0;
@@ -50,7 +50,7 @@
       border: 1px solid #000;
       cursor: grab;
       background: #fff;
-      max-width: 320px; /* MAX WIDTH SET */
+      max-width: 320px;
       transition: transform 0.2s ease;
       position: relative;
     }
@@ -100,7 +100,7 @@
     }
     #comparisonView th:nth-child(2),
     #comparisonView th:nth-child(4) {
-      width: 150px; /* Fixed width for second & fourth columns */
+      width: 150px;
     }
     .legend {
       margin: 10px 0;
@@ -232,7 +232,13 @@
       input.addEventListener('input', e => { updateDatalist(e.target.value); saveData(); updatePhotos(); });
       item.addEventListener('dragstart', () => { draggedItem = item; item.classList.add('dragging'); });
       item.addEventListener('dragend', () => { draggedItem = null; item.classList.remove('dragging'); updateNumbers(); saveData(); updatePhotos(); });
-      item.addEventListener('dragover', e => { e.preventDefault(); const bounding = item.getBoundingClientRect(); const offset = bounding.y + bounding.height / 2; if(e.clientY - offset>0) item.after(draggedItem); else item.before(draggedItem); });
+      item.addEventListener('dragover', e => {
+        e.preventDefault();
+        const bounding = item.getBoundingClientRect();
+        const offset = bounding.y + bounding.height / 2;
+        if (e.clientY - offset > 0) item.after(draggedItem);
+        else item.before(draggedItem);
+      });
     });
 
     updatePhotos();
@@ -243,14 +249,19 @@
         const res = await fetch(GOOGLE_SCRIPT_URL, {method:'POST', body:JSON.stringify(rankings)});
         if(res.ok) alert("Rankings submitted!");
         else alert("Error submitting rankings.");
-      } catch(err) { console.error(err); alert("Error submitting rankings."); }
+      } catch(err) {
+        console.error(err);
+        alert("Error submitting rankings.");
+      }
     });
 
     shareBtn.addEventListener("click", () => {
       const rankings = Array.from(document.querySelectorAll(".rank-item input")).map(i => i.value || "");
       const encoded = encodeURIComponent(rankings.join("|"));
       const shareURL = `${window.location.origin}${window.location.pathname}?view=1&rankings=${encoded}`;
-      navigator.clipboard.writeText(shareURL).then(()=> alert("Share link copied!")).catch(()=> prompt("Copy this link:", shareURL));
+      navigator.clipboard.writeText(shareURL)
+        .then(()=> alert("Share link copied!"))
+        .catch(()=> prompt("Copy this link:", shareURL));
     });
 
     (function checkForViewMode() {
@@ -265,7 +276,11 @@
         input.readOnly = true;
         item.draggable = false;
       });
-      clearBtn.style.display="none"; submitBtn.style.display="none"; shareBtn.style.display="none"; compareBtn.style.display="none"; backBtn.style.display="none";
+      clearBtn.style.display="none";
+      submitBtn.style.display="none";
+      shareBtn.style.display="none";
+      compareBtn.style.display="none";
+      backBtn.style.display="none";
       updatePhotos();
     })();
 
@@ -275,15 +290,22 @@
       userRankings.forEach((name, idx)=>{
         const row = document.createElement('tr');
         const fixedName = fixedList[idx] || "";
-        const yourColor = !name ? "" : !fixedList.includes(name) ? "#ff6b6b" : fixedList.indexOf(name) < idx ? "#ffe066" : fixedList.indexOf(name) > idx ? "#a0c4ff" : "#8ae29c";
+        const yourColor = !name ? "" :
+          !fixedList.includes(name) ? "#ff6b6b" :
+          fixedList.indexOf(name) < idx ? "#ffe066" :
+          fixedList.indexOf(name) > idx ? "#a0c4ff" :
+          "#8ae29c";
+
         const [firstName, ...rest] = name.split(' ');
         const lastName = rest.join('');
         const yourID = (lastName.slice(0,5)+firstName.slice(0,2)+'01').toLowerCase();
         const yourPhoto = name ? `https://www.basketball-reference.com/req/202112091/images/players/${yourID}.jpg` : placeholderImg;
+
         const [fFirst, ...fRest] = fixedName.split(' ');
         const fLast = fRest.join('');
         const fID = fixedName ? (fLast.slice(0,5)+fFirst.slice(0,2)+'01').toLowerCase() : "";
         const fixedPhoto = fixedName ? `https://www.basketball-reference.com/req/202112091/images/players/${fID}.jpg` : placeholderImg;
+
         row.innerHTML = `
           <td>#${idx+1}</td>
           <td style="background:${yourColor}">${name}</td>
@@ -293,6 +315,7 @@
         `;
         comparisonTableBody.appendChild(row);
       });
+
       rankList.style.display = "none";
       compareBtn.style.display = "none";
       backBtn.style.display = "inline-block";
