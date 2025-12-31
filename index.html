@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Top 80 Hottest NBA Players</title>
-<link rel="shortcut icon" type="image/x-icon" href="favicon3.ico?">
+  <link rel="shortcut icon" type="image/x-icon" href="favicon3.ico?">
   
   <style>
     body { font-family: Arial, Helvetica, sans-serif; background: #ffffff; color: #000; margin: 40px; }
@@ -41,12 +41,6 @@
     #comparisonView img { width: 40px; height: 40px; object-fit: cover; }
     .legend { margin: 10px 0; font-size: 14px; }
     .legend span { display: inline-block; width: 15px; height: 15px; margin-right: 5px; vertical-align: middle; }
-
-    /* Mobile hint styling */
-    .mobile-hint { display:none; font-size: 12px; color: #666; margin-bottom: 5px; }
-    @media (hover:none) and (pointer:coarse) {
-      .mobile-hint { display:block; }
-    }
   </style>
 </head>
 
@@ -54,8 +48,6 @@
 <h1>Top 80 Hottest NBA Players</h1>
 <h2>beauty is subjective. democracy is hot.</h2>
 <h3><a href="https://www.instagram.com/nbaresdev/" target="_blank">@nbaresdev</a></h3>
-
-<div class="mobile-hint">Tap input to see player suggestions</div>
 
 <div>
   <button id="clearBtn">Clear All</button>
@@ -130,7 +122,7 @@ for(let i=1;i<=80;i++){
   d.draggable=true;
   d.innerHTML=`
     <div class="rank-number">#${i}</div>
-    <input list="players" value="${saved[i-1]||""}" placeholder="Tap here for players"/>
+    <input list="players" value="${saved[i-1]||""}" placeholder="Enter player name"/>
     <img class="player-photo" src="${photoURL(saved[i-1])}" onerror="this.src='${placeholderImg}'">
   `;
   rankList.appendChild(d);
@@ -182,10 +174,24 @@ document.querySelectorAll(".rank-item").forEach(item=>{
   });
 });
 
-document.querySelectorAll(".rank-item input").forEach(input=>{
-  input.addEventListener("input",e=>{ updateDatalist(e.target.value); save(); updatePhotos(); });
-  input.addEventListener("change",()=>{ save(); updatePhotos(); });
-  input.addEventListener("keyup",()=>{ save(); updatePhotos(); });
+// Desktop + mobile-safe input handling
+document.querySelectorAll(".rank-item input").forEach(input => {
+  input.addEventListener("input", e => { updateDatalist(e.target.value); save(); updatePhotos(); });
+  input.addEventListener("change", () => { save(); updatePhotos(); });
+  input.addEventListener("keyup", () => { save(); updatePhotos(); });
+
+  // Mobile-specific Apple predictive text fix
+  if(window.matchMedia("(hover:none) and (pointer:coarse)").matches){
+    let lastVal = input.value;
+    input.addEventListener("focus", () => { lastVal = input.value; });
+    input.addEventListener("blur", () => {
+      if(input.value !== lastVal){
+        lastVal = input.value;
+        save();
+        updatePhotos();
+      }
+    });
+  }
 });
 
 // Clear
@@ -203,7 +209,7 @@ document.getElementById("submitBtn").onclick=async()=>{
   }catch(e){ alert("Error submitting rankings."); }
 };
 
-// Share (working version)
+// Share
 document.getElementById("shareBtn").onclick=()=>{
   const rankings=[...document.querySelectorAll(".rank-item input")].map(i=>i.value||"");
   const encoded=encodeURIComponent(rankings.join("|"));
@@ -225,9 +231,9 @@ document.getElementById("compareBtn").onclick=()=>{
       <tr>
         <td>#${idx+1}</td>
         <td style="background:${c}">${n}</td>
-        <td><img src="${photoURL(n)}" onerror="this.src='${placeholderImg}'"></td>
+        <td><img src="${photoURL(n)}" onerror="this.src='${placeholderImg}'></td>
         <td>${f}</td>
-        <td><img src="${photoURL(f)}" onerror="this.src='${placeholderImg}'"></td>
+        <td><img src="${photoURL(f)}" onerror="this.src='${placeholderImg}'></td>
       </tr>`;
   });
   rankList.style.display="none";
@@ -268,7 +274,7 @@ document.getElementById("backBtn").onclick=()=>{
 // Rank your own list button
 document.getElementById("rankOwnBtn").onclick=()=>{
   localStorage.removeItem(STORAGE_KEY);
-  window.location.href=location.origin + location.pathname;
+  window.location.href=location.origin + location.pathname; // resets to blank ranking page
 };
 
 updatePhotos();
