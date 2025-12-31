@@ -1,66 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Top 80 Hottest NBA Players</title>
-<link rel="shortcut icon" type="image/x-icon" href="favicon3.ico?">
-<style>
-body { font-family: Arial, Helvetica, sans-serif; background: #ffffff; color: #000; margin: 40px; }
-h1 { font-size: 24px; margin-bottom: 5px; }
-h2 { font-size: 16px; margin: 2px 0; }
-h3 { font-size: 14px; margin: 10px 0; font-style: italic; }
-h3 a { text-decoration: none; color: #808080; }
+  <meta charset="UTF-8" />
+  <title>Top 80 Hottest NBA Players</title>
+  <link rel="shortcut icon" type="image/x-icon" href="favicon3.ico?">
+  
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; background: #ffffff; color: #000; margin: 40px; }
+    h1 { font-size: 24px; margin-bottom: 5px; }
+    h2 { font-size: 16px; margin: 2px 0; }
+    h3 { font-size: 14px; margin: 10px 0; font-style: italic; }
+    h3 a { text-decoration: none; color: #808080; }
 
-button { margin: 5px 5px 15px 0; padding: 6px 12px; font-size: 14px; border: 1px solid #000; background: #fff; cursor: pointer; }
-button:hover { background: #000; color: #fff; }
+    button { margin: 5px 5px 15px 0; padding: 6px 12px; font-size: 14px; border: 1px solid #000; background: #fff; cursor: pointer; }
+    button:hover { background: #000; color: #fff; }
 
-.rank-list { max-width: 650px; }
-.rank-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-  padding: 4px;
-  border: 1px solid #000;
-  cursor: grab;
-  background: #fff;
-  max-width: 320px;
-  transition: transform 0.2s ease;
-  position: relative;
-}
-.rank-item.dragging { opacity: 0.8; cursor: grabbing; }
-.rank-number { width: 40px; font-weight: bold; user-select: none; }
-input { flex: 1; padding: 6px 8px; font-size: 14px; border: none; background: #fff; }
-input:focus { outline: none; }
-.player-photo { width: 50px; height: 50px; margin-left: 10px; object-fit: cover; }
+    .rank-list { max-width: 650px; }
+    .rank-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      padding: 4px;
+      border: 1px solid #000;
+      cursor: grab;
+      background: #fff;
+      max-width: 320px;
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+    .rank-item.dragging { opacity: 0.8; cursor: grabbing; }
+    .rank-number { width: 40px; font-weight: bold; user-select: none; }
+    input { flex: 1; padding: 6px 8px; font-size: 14px; border: none; background: #fff; }
+    input:focus { outline: none; }
+    .player-photo { width: 50px; height: 50px; margin-left: 10px; object-fit: cover; }
 
-/* Mobile arrow overlay */
-.mobile-arrow {
-  display: none; /* desktop hidden */
-  position: absolute;
-  right: 4px;
-  width: 28px;
-  height: 28px;
-  cursor: pointer;
-  z-index: 5;
-  pointer-events: auto;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><polygon points="6,9 12,15 18,9" fill="black"/></svg>') no-repeat center center;
-  background-size: 16px 16px;
-}
+    #comparisonView { display: none; margin-top: 20px; max-width: 800px; overflow-x: auto; }
+    #comparisonView table { border-collapse: collapse; width: 100%; }
+    #comparisonView th, #comparisonView td { border: 1px solid #ccc; padding: 5px; text-align: center; vertical-align: middle; min-width: 80px; }
+    #comparisonView th:nth-child(2), #comparisonView th:nth-child(4) { width: 150px; }
+    #comparisonView img { width: 40px; height: 40px; object-fit: cover; }
+    .legend { margin: 10px 0; font-size: 14px; }
+    .legend span { display: inline-block; width: 15px; height: 15px; margin-right: 5px; vertical-align: middle; }
 
-#comparisonView { display: none; margin-top: 20px; max-width: 800px; overflow-x: auto; }
-#comparisonView table { border-collapse: collapse; width: 100%; }
-#comparisonView th, #comparisonView td { border: 1px solid #ccc; padding: 5px; text-align: center; vertical-align: middle; min-width: 80px; }
-#comparisonView th:nth-child(2), #comparisonView th:nth-child(4) { width: 150px; }
-#comparisonView img { width: 40px; height: 40px; object-fit: cover; }
-.legend { margin: 10px 0; font-size: 14px; }
-.legend span { display: inline-block; width: 15px; height: 15px; margin-right: 5px; vertical-align: middle; }
-
-@media (hover: none) and (pointer: coarse) {
-  .rank-item input::placeholder { content: "Tap arrow for players"; }
-  input { padding-right: 36px; }
-  .mobile-arrow { display: block; }
-}
-</style>
+    /* ===== MOBILE ONLY PLACEHOLDER & BIGGER ARROW ===== */
+    @media (hover: none) and (pointer: coarse) {
+      .rank-item input { padding-right: 40px; }
+      .mobile-arrow {
+        display: block;
+        position: absolute;
+        right: 6px;
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+        z-index: 5;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><polygon points="6,9 12,15 18,9" fill="black"/></svg>') no-repeat center center;
+        background-size: 18px 18px;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -142,13 +139,11 @@ for(let i=1;i<=80;i++){
   d.innerHTML=`
     <div class="rank-number">#${i}</div>
     <input list="players" value="${saved[i-1]||""}" placeholder="Enter player name"/>
-    <img class="player-photo" src="${photoURL(saved[i-1])}" onerror="this.src='${placeholderImg}'>
-    <div class="mobile-arrow"></div>
+    <img class="player-photo" src="${photoURL(saved[i-1])}" onerror="this.src='${placeholderImg}'">
   `;
   rankList.appendChild(d);
 }
 
-/* Datalist for autocomplete */
 const dl=document.createElement("datalist");
 dl.id="players";
 document.body.appendChild(dl);
@@ -163,10 +158,10 @@ function updateDatalist(val){
   });
 }
 
-/* Save & update photos */
 function save(){
   localStorage.setItem(STORAGE_KEY,JSON.stringify([...document.querySelectorAll(".rank-item input")].map(i=>i.value)));
 }
+
 function updatePhotos(){
   document.querySelectorAll(".rank-item").forEach(r=>{
     const i=r.querySelector("input");
@@ -175,13 +170,14 @@ function updatePhotos(){
     img.onerror = () => img.src = placeholderImg;
   });
 }
+
 function updateNumbers(){
   document.querySelectorAll(".rank-item").forEach((item,index)=>{
     item.querySelector(".rank-number").textContent=`#${index+1}`;
   });
 }
 
-/* Drag & drop */
+// Drag & Drop
 let draggedItem=null;
 document.querySelectorAll(".rank-item").forEach(item=>{
   item.addEventListener("dragstart",()=>{ draggedItem=item; item.classList.add("dragging"); });
@@ -194,33 +190,26 @@ document.querySelectorAll(".rank-item").forEach(item=>{
   });
 });
 
-/* Input events */
 document.querySelectorAll(".rank-item input").forEach(input=>{
   input.addEventListener("input",e=>{ updateDatalist(e.target.value); save(); updatePhotos(); });
 });
 
-/* Mobile arrow click */
-if(window.matchMedia("(hover: none) and (pointer: coarse)").matches){
-  document.querySelectorAll(".mobile-arrow").forEach(arrow=>{
-    arrow.addEventListener("click",e=>{
-      const input=arrow.parentElement.querySelector("input");
-      input.focus();
-      input.click();
-    });
-  });
-}
-
-/* Buttons: clear, submit, share, compare, back, rankOwn */
+// Clear
 document.getElementById("clearBtn").onclick=()=>{
   document.querySelectorAll(".rank-item input").forEach(i=>i.value="");
   save(); updatePhotos();
 };
+
+// Submit
 document.getElementById("submitBtn").onclick=async()=>{
   const rankings=[...document.querySelectorAll(".rank-item input")].map(i=>i.value);
-  try{ const res=await fetch(GOOGLE_SCRIPT_URL,{method:"POST",body:JSON.stringify(rankings)});
+  try{
+    const res=await fetch(GOOGLE_SCRIPT_URL,{method:"POST",body:JSON.stringify(rankings)});
     alert(res.ok?"Rankings submitted!":"Error submitting rankings.");
   }catch(e){ alert("Error submitting rankings."); }
 };
+
+// Share
 document.getElementById("shareBtn").onclick=()=>{
   const rankings=[...document.querySelectorAll(".rank-item input")].map(i=>i.value||"");
   const encoded=encodeURIComponent(rankings.join("|"));
@@ -229,6 +218,8 @@ document.getElementById("shareBtn").onclick=()=>{
     navigator.clipboard.writeText(url).then(()=>alert("Share link copied!")).catch(()=>prompt("Copy this link:",url));
   } else { prompt("Copy this link:",url); }
 };
+
+// Compare
 document.getElementById("compareBtn").onclick=()=>{
   const body=document.querySelector("#comparisonTable tbody");
   body.innerHTML="";
@@ -250,18 +241,16 @@ document.getElementById("compareBtn").onclick=()=>{
   backBtn.style.display="inline-block";
   compareBtn.style.display="none";
 };
+
+// Back
 document.getElementById("backBtn").onclick=()=>{
   comparisonView.style.display="none";
   rankList.style.display="block";
   backBtn.style.display="none";
   compareBtn.style.display="inline-block";
 };
-document.getElementById("rankOwnBtn").onclick=()=>{
-  localStorage.removeItem(STORAGE_KEY);
-  window.location.href=location.origin + location.pathname;
-};
 
-/* Share view mode */
+// Share view mode
 (function checkViewMode(){
   const params=new URLSearchParams(window.location.search);
   if(params.get("view")!=="1") return;
@@ -281,6 +270,28 @@ document.getElementById("rankOwnBtn").onclick=()=>{
   backBtn.style.display="none";
   document.getElementById("rankOwnBtn").style.display="inline-block";
 })();
+
+// Rank your own list button
+document.getElementById("rankOwnBtn").onclick=()=>{
+  localStorage.removeItem(STORAGE_KEY);
+  window.location.href=location.origin + location.pathname; // resets to blank ranking page
+};
+
+// ===== MOBILE ONLY PLACEHOLDER + ARROW =====
+if(window.matchMedia("(hover: none) and (pointer: coarse)").matches){
+  document.querySelectorAll(".rank-item").forEach(item=>{
+    const input = item.querySelector("input");
+    input.placeholder = "Tap arrow for players";
+
+    const arrow = document.createElement("div");
+    arrow.className = "mobile-arrow";
+    arrow.addEventListener("click", e=>{
+      input.focus();
+      input.click();
+    });
+    item.appendChild(arrow);
+  });
+}
 
 updatePhotos();
 updateNumbers();
