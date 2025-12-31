@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Top 80 Hottest NBA Players</title>
-  <link rel="shortcut icon" type="image/x-icon" href="favicon3.ico?">
+<link rel="shortcut icon" type="image/x-icon" href="favicon3.ico?">
   
   <style>
     body { font-family: Arial, Helvetica, sans-serif; background: #ffffff; color: #000; margin: 40px; }
@@ -135,7 +135,7 @@ document.body.appendChild(dl);
 function updateDatalist(val){
   dl.innerHTML="";
   if(!val) return;
-  allPlayers.filter(p=>p.toLowerCase().includes(val.toLowerCase())).slice(0,6).forEach(p=>{
+  allPlayers.filter(p=>p.toLowerCase().includes(val.toLowerCase())).slice(0,10).forEach(p=>{
     const o=document.createElement("option");
     o.value=p;
     dl.appendChild(o);
@@ -174,24 +174,8 @@ document.querySelectorAll(".rank-item").forEach(item=>{
   });
 });
 
-// Desktop + mobile-safe input handling
-document.querySelectorAll(".rank-item input").forEach(input => {
-  input.addEventListener("input", e => { updateDatalist(e.target.value); save(); updatePhotos(); });
-  input.addEventListener("change", () => { save(); updatePhotos(); });
-  input.addEventListener("keyup", () => { save(); updatePhotos(); });
-
-  // Mobile-specific Apple predictive text fix
-  if(window.matchMedia("(hover:none) and (pointer:coarse)").matches){
-    let lastVal = input.value;
-    input.addEventListener("focus", () => { lastVal = input.value; });
-    input.addEventListener("blur", () => {
-      if(input.value !== lastVal){
-        lastVal = input.value;
-        save();
-        updatePhotos();
-      }
-    });
-  }
+document.querySelectorAll(".rank-item input").forEach(input=>{
+  input.addEventListener("input",e=>{ updateDatalist(e.target.value); save(); updatePhotos(); });
 });
 
 // Clear
@@ -209,7 +193,7 @@ document.getElementById("submitBtn").onclick=async()=>{
   }catch(e){ alert("Error submitting rankings."); }
 };
 
-// Share
+// Share (working version)
 document.getElementById("shareBtn").onclick=()=>{
   const rankings=[...document.querySelectorAll(".rank-item input")].map(i=>i.value||"");
   const encoded=encodeURIComponent(rankings.join("|"));
@@ -231,9 +215,9 @@ document.getElementById("compareBtn").onclick=()=>{
       <tr>
         <td>#${idx+1}</td>
         <td style="background:${c}">${n}</td>
-        <td><img src="${photoURL(n)}" onerror="this.src='${placeholderImg}'></td>
+        <td><img src="${photoURL(n)}" onerror="this.src='${placeholderImg}'"></td>
         <td>${f}</td>
-        <td><img src="${photoURL(f)}" onerror="this.src='${placeholderImg}'></td>
+        <td><img src="${photoURL(f)}" onerror="this.src='${placeholderImg}'"></td>
       </tr>`;
   });
   rankList.style.display="none";
