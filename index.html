@@ -93,7 +93,8 @@ const PLAYER_ID_OVERRIDES = {
   "Jared McCain": "mccaija02",
   "Shaquille O'Neal": "onealsh01",
   "D'Angelo Russell": "russeda01",
-  "Victor Wembanyama": "wembavi01"
+  "Victor Wembanyama": "wembavi01",
+  "Jalen Brown": "brownja02"
 };
 
 const fixedList = [ "Dwyane Wade", "Nic Claxton", "Ochai Agbaju", "Tristan Thompson", "Rick Fox", "Kevin Love", "Anthony Edwards", "LeBron James", "Jared McCain", "Giannis Antetokounmpo", "Wally Szczerbiak", "Shai Gilgeous Alexander", "Dejounte Murray", "Allen Iverson", "Cam Johnson", "Raja Bell", "Kyle Korver", "Miles McBride", "Serge Ibaka", "Devin Booker", "Jaylen Brown", "Quentin Grimes", "Kenny Smith", "Kyle Kuzma", "Carmelo Anthony", "Grant Hill", "Derrick Rose", "Jalen Green", "Tyrese Haliburton", "Jimmy Butler", "Michael Jordan", "Victor Wembanyama", "Blake Griffin", "Donavan Mitchell", "Kyrie Irving", "Kelly Oubre", "Paul George", "Donte Divincenzo", "Alan Houston", "Tony Parker", "Jayson Tatum", "Walt Frazier", "Karl-Anthony Towns", "Rui Hachimura", "Jamal Murray", "Tre Mann", "Andre Drummond", "Wilt Chamberlain", "Jordan Poole", "Kawhi Leonard", "Ja Morant", "John Starks", "Tim Hardaway Jr", "Josh Hart", "Jaden Ivey", "Jalen Brunson", "Magic Johnson", "Nigel Hayes", "Chandler Parsons", "Austin Reaves", "Steph Curry", "Steven Adams", "Damian Lillard", "D'Angelo Russell", "RJ Barrett", "Mike Conley", "Shaquille O'Neal", "OG Anunoby", "Julius Erving", "Domantis Sabonis", "Rudy Gobert", "Zach Lavine", "JJ Redick", "Ben Simmons", "Jordan Clarkson", "PJ Washington", "Vince Carter", "Luka Doncic", "Joakim Noah", "Reggie Miller"];
@@ -103,7 +104,6 @@ function photoURL(name){
   if(!name) return placeholderImg;
   if(name==="Jared McCain") return "https://www.basketball-reference.com/req/202106291/images/headshots/mccaija01.jpg";
   if(name==="Victor Wembanyama") return "https://www.basketball-reference.com/req/202106291/images/headshots/wembavi01.jpg";
-   if(name==="Jalen Brown") return "https://www.basketball-reference.com/players/b/brownja02.html";
   if(PLAYER_ID_OVERRIDES[name])
     return `https://www.basketball-reference.com/req/202112091/images/players/${PLAYER_ID_OVERRIDES[name]}.jpg`;
 
